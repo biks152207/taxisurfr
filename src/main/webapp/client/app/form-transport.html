@@ -50,10 +50,18 @@
     </div>
 </script>
 <div class='container-fluid typeahead-route'>
-
+    <div class="row" ng-if="errMessage">
+      <div class="col-md-12 text-center">
+        <span><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{errMessage}}</span>
+      </div>
+    </div>
+    <div class="row" ng-if="noroutefound">
+      <div class="col-md-12 text-center">
+        <span><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{noroutefound}}</span>
+      </div>
+    </div>
+    <br>
     <form name="transportForm" novalidate>
-
-        <hi>{{ noroutefound }}</hi>
         <div class="form-group row" ng-hide="route">
             <div class="col-sm-6">
                 <label>Pickup</label>
@@ -68,7 +76,7 @@
                        typeahead-min-length="0">
 
             </div>
-            <div class="col-sm-6" ng-hide="selectedStart===null">
+            <div class="col-sm-6" ng-if="selectedStartId">
 
                 <!--<pre>Model: {{selectedEnd | json}}</pre>-->
                 <label>Dropoff</label>
@@ -100,23 +108,23 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-12" ng-show="route">
+        <div ng-repeat="r in result">
+        <div class="col-sm-12" ng-if="result.length > 0">
             <br/>
             <!--<h4 class="row bg-success  col-sm-9">{{route.start + ' to '+route.end}}</h4>-->
             <div class="form-group row">
                 <!--<pre>Route: {{route}}</pre>-->
 
                 <h4>Description</h4>
-                <pre class="bg-primary">{{route.data.startroute + ' to '+route.data.endroute}}</pre>
-                <pre class="bg-primary">{{' Price $US'+ route.data.cents/100}}</pre>
+                <pre class="bg-primary">{{r.startroute + ' to ' + r.endroute}}</pre>
+                <pre class="bg-primary">{{' Price : '+ r.price}}</pre>
 
                 <div class="row">
                     <div class="col-sm-9">
-                        <h6>{{route.data.description}}</h6>
+                        <h6>{{r.description}}</h6>
                     </div>
                     <div class="col-sm-3">
-                        <img ng-src="{{imgSrc}}" width="150px"/>
+                        <img ng-src="{{r.image}}" width="150px"/>
                     </div>
                 </div>
             </div>
@@ -124,18 +132,17 @@
 
         <div class="form-group row">
             <div class="col-xs-6">
-                <button ng-show="route" ui-sref="form.details" class="btn btn-block btn-info" ng-click="addSession()">
+                <button  ui-sref="form.details" class="btn btn-block btn-info" ng-click="addSession()">
                     Book Now <span class="glyphicon glyphicon-circle-arrow-right"></span>
                 </button>
             </div>
             <div class="col-xs-6">
-                <button ng-show="route" class="btn btn-block btn-info" ng-click="resetRoute()">
+                <button  class="btn btn-block btn-info" ng-click="resetRoute()">
                     New Route.
                 </button>
             </div>
         </div>
+      </div>
 
     </form>
 </div>
-
-
